@@ -1,7 +1,8 @@
 fun main() {
-    fun part1(input: List<String>): Int = input.countMeasurementIncrease(windowSize = 1)
+    fun part1(input: List<String>): Int = input.countByWindow(windowSize = 2) { (a, b) -> b > a }
 
-    fun part2(input: List<String>): Int = input.countMeasurementIncrease(windowSize = 3)
+    // a + b + c <=> b + c + d -> a <=> d
+    fun part2(input: List<String>): Int = input.countByWindow(windowSize = 4) { (a, _, _, d) -> d > a }
 
     // test if implementation meets criteria from the description, like what?:
     val testInput = readInput("Day01_test")
@@ -13,6 +14,6 @@ fun main() {
     println(part2(input))
 }
 
-fun List<String>.countMeasurementIncrease(windowSize: Int) = windowed(windowSize) { it.sumOf(String::toInt) }
-    .zipWithNext()
-    .count { it.second > it.first }
+fun List<String>.countByWindow(windowSize: Int, predicate: (List<Int>) -> Boolean) = map(String::toInt)
+    .windowed(windowSize)
+    .count(predicate)
