@@ -32,7 +32,7 @@ fun main() {
     println(part2(input))
 }
 
-fun List<String>.calculateRating(bitIndex: Int, filterMostCommon: Boolean): Int {
+tailrec fun List<String>.calculateRating(bitIndex: Int, filterMostCommon: Boolean): Int {
     val bit = map { it[bitIndex] }.count { it == '1' }
         .let { if (it >= (size / 2.0).roundToInt()) 1 else 0 }
         .let { if (filterMostCommon) it else it xor 0b1 }
