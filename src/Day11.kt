@@ -30,30 +30,28 @@ fun main() {
 private val diffX = listOf(-1, -1, -1, 0, 1, 1, 1, 0)
 private val diffY = listOf(1, 0, -1, -1, -1, 0, 1, 1)
 
-private data class Coord(val y: Int, val x: Int)
-
 private fun MutableList<MutableList<Int>>.energyGain(): List<Coord> {
     val flashesCoords = mutableListOf<Coord>()
     for (y in indices) {
         for (x in get(y).indices) {
             val newLevel = this[y][x] + 1
-            this[y][x] = if (newLevel != 10) newLevel else 0.also { flashesCoords.add(Coord(y, x)) }
+            this[y][x] = if (newLevel != 10) newLevel else 0.also { flashesCoords.add(Coord(x, y)) }
         }
     }
     var coordIndex = 0
     while (coordIndex < flashesCoords.size) {
-        val (y, x) = flashesCoords[coordIndex]
+        val (x, y) = flashesCoords[coordIndex]
         for (di in 0..7) {
             val newY = y + diffY[di]
             val newX = x + diffX[di]
             if (newY !in indices
                 || newX !in get(newY).indices
-                || Coord(newY, newX) in flashesCoords
+                || Coord(newX, newY) in flashesCoords
             ) {
                 continue
             }
             val newLevel = this[newY][newX] + 1
-            this[newY][newX] = if (newLevel != 10) newLevel else 0.also { flashesCoords.add(Coord(newY, newX)) }
+            this[newY][newX] = if (newLevel != 10) newLevel else 0.also { flashesCoords.add(Coord(newX, newY)) }
         }
         coordIndex++
     }
